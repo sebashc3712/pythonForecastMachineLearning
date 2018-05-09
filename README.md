@@ -20,4 +20,6 @@ You need to install sklearn and pandas. The easiest way to install these package
 ```
 https://www.anaconda.com/download/
 ```
+### License
 
+MIT
