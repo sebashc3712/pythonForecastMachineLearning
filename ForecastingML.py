@@ -108,6 +108,7 @@ def bestDT(X_train,X_test,y_train,y_test,n_components,MaxDepth):
 def forecastingModel(Dataset,Label,MLP=False,MaxLayers=100,MaxDepth=10):
     best_model_all=[]
     best_score_all=0
+    intial_components=len(Dataset.columns)
     #Here you set the PCA and try different values for n_components
     n_components=1
     best_MLP=0
@@ -126,6 +127,61 @@ def forecastingModel(Dataset,Label,MLP=False,MaxLayers=100,MaxDepth=10):
     best_PCA_DT=0
     best_LinearRegression=0
     best_PCA_LinearRegression=0
+    # Without PCA
+    #Here you split the data
+    X_train, X_test, y_train, y_test = train_test_split(Dataset, Label, test_size=0.33)
+    #MLP
+    if MLP==True:
+        best_score,best_PCA,best_Layers,best_Neurons,best_model_MLP=bestMLP(X_train,X_test,y_train,y_test,intial_components,MaxLayers)
+        if best_score>best_MLP:
+            best_MLP=best_score
+            best_PCA_MLP=best_PCA
+            best_Layers_MLP=best_Layers
+            best_Neurons_MLP=best_Neurons
+        if best_score>best_score_all:
+            best_model_all=best_model_MLP
+            best_score_all=best_score
+    #SVR
+    model3=SVR()
+    model3.fit(X_train,y_train)
+    score=model3.score(X_test,y_test)
+    if score > best_SVR:
+        best_SVR=score
+        best_PCA_SVR=intial_components
+    if score > best_score_all:
+        best_model_all=model3
+        best_score_all=score
+    #RandomForestRegressor
+    best_score,best_depth,best_randomState,best_PCA, best_model_RF=bestRF(X_train,X_test,y_train,y_test,intial_components,MaxDepth)
+    if best_score>best_RandomForest:
+        best_RandomForest=best_score
+        best_PCA_RF=best_PCA
+        max_depth_RF=best_depth
+        random_state_RF=best_randomState
+    if best_score>best_score_all:
+        best_model_all=best_model_RF
+        best_score_all=best_score
+    #DecisionTree
+    best_score,best_depth,best_randomState,best_PCA, best_model_DT=bestDT(X_train,X_test,y_train,y_test,intial_components,MaxDepth)
+    if best_score>best_DecisionTree:
+        best_DecisionTree=best_score
+        best_PCA_DT=best_PCA
+        max_depth_DT=best_depth
+        random_state_DT=best_randomState
+    if best_score>best_score_all:
+        best_model_all=best_model_DT
+        best_score_all=best_score
+    #LinearRregression
+    model6=LinearRegression()
+    model6.fit(X_train,y_train)
+    score=model6.score(X_test,y_test)
+    if score > best_LinearRegression:
+        best_LinearRegression=score
+        best_PCA_LinearRegression=intial_components
+    if score > best_score_all:
+        best_model_all=model6
+        best_score_all=score
+    # With PCA
     for n_components in range(1,len(Dataset.columns)):
         model=PCA(n_components=n_components)
         model.fit(Dataset)
@@ -198,6 +254,7 @@ def forecastingModel(Dataset,Label,MLP=False,MaxLayers=100,MaxDepth=10):
 def forecastingModelISO(Dataset,Label,MLP=False,MaxLayers=100,neighbors=20,MaxDepth=10):
     best_model_all=[]
     best_score_all=0
+    intial_components=len(Dataset.columns)
     #Here you set the Isomap and try different values for n_components
     n_components=1
     best_MLP=0
@@ -221,6 +278,61 @@ def forecastingModelISO(Dataset,Label,MLP=False,MaxLayers=100,neighbors=20,MaxDe
     best_LinearRegression=0
     best_ISO_LinearRegression=0
     best_neighbor_LinearRregression=0
+    # Without Isomap
+    #Here you split the data
+    X_train, X_test, y_train, y_test = train_test_split(Dataset, Label, test_size=0.33)
+    #MLP
+    if MLP==True:
+        best_score,best_ISO,best_Layers,best_Neurons,best_model_MLP=bestMLP(X_train,X_test,y_train,y_test,intial_components,MaxLayers)
+        if best_score>best_MLP:
+            best_MLP=best_score
+            best_ISO_MLP=best_ISO
+            best_Layers_MLP=best_Layers
+            best_Neurons_MLP=best_Neurons
+        if best_score>best_score_all:
+            best_model_all=best_model_MLP
+            best_score_all=best_score
+    #SVR
+    model3=SVR()
+    model3.fit(X_train,y_train)
+    score=model3.score(X_test,y_test)
+    if score > best_SVR:
+        best_SVR=score
+        best_ISO_SVR=intial_components
+    if score > best_score_all:
+        best_model_all=model3
+        best_score_all=score
+    #RandomForestRegressor
+    best_score,best_depth,best_randomState,best_ISO, best_model_RF=bestRF(X_train,X_test,y_train,y_test,intial_components,MaxDepth)
+    if best_score>best_RandomForest:
+        best_RandomForest=best_score
+        best_ISO_RF=best_ISO
+        max_depth_RF=best_depth
+        random_state_RF=best_randomState
+    if best_score>best_score_all:
+        best_model_all=best_model_RF
+        best_score_all=best_score
+    #DecisionTree
+    best_score,best_depth,best_randomState,best_ISO, best_model_DT=bestDT(X_train,X_test,y_train,y_test,intial_components,MaxDepth)
+    if best_score>best_DecisionTree:
+        best_DecisionTree=best_score
+        best_ISO_DT=best_ISO
+        max_depth_DT=best_depth
+        random_state_DT=best_randomState
+    if best_score>best_score_all:
+        best_model_all=best_model_DT
+        best_score_all=best_score
+    #LinearRregression
+    model6=LinearRegression()
+    model6.fit(X_train,y_train)
+    score=model6.score(X_test,y_test)
+    if score > best_LinearRegression:
+        best_LinearRegression=score
+        best_ISO_LinearRegression=intial_components
+    if score > best_score_all:
+        best_model_all=model6
+        best_score_all=score
+    # With Isomap
     for n_components in range(1,len(Dataset.columns)):
         neighbor=1
         for neighbor in range(1,neighbors+1):

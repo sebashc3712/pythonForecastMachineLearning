@@ -1,7 +1,8 @@
 
 import pandas as pd # pandas to dataframe handle
-from ForecastingML import bestForecastModel
+from ForecastingML import bestForecastModel # Machine learning algorithm
 from sklearn.externals import joblib # joblib library
+
 
 
 
@@ -25,7 +26,7 @@ df.drop(['charges'], axis=1, inplace=True)
 
 
 # Here the best model and his score are saved in a and b respectively and then
-# the model is saved into a file named <bestForcastModel.pkl
+# the model is saved into a file named <bestForcastModel.pkl>
 a,b=bestForecastModel(df,label)
-joblib.dump(a, 'bestForecastModel.pkl') 
+joblib.dump(a, 'bestForecastModel.pkl')
 
